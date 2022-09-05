@@ -1,7 +1,8 @@
 <template>
 	<div id="indexlist" v-if="indexs">
 		<div v-for="i in indexs">
-			<button @click="send(i)" @dblclick="accept(i['id'])">{{i["id"]}}</button>
+			<button @click="send(i)" @dblclick="accept(i['id'])" >{{i["id"]}}</button>
+      <button @click="accept(i['id'])">accept</button>
 		</div>
 	</div>
 	<div id="brandlist" v-else-if="category">

@@ -122,6 +122,45 @@
 				handler(newValue, oldValue) {
 					console.log(oldValue)
 					// here send commands to /task
+          fetch("/irext-server/operation/decode", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              "id": this.$props.uid,
+              "token": this.$props.token,
+              "indexId": this.$props.indexId,
+              "keyCode": "1",
+              "acStatus":
+                  {
+                    "acPower": this.acstate.power ? "0" : "1",
+                    "acMode": Modes[this.acstate.mode],
+                    "acTemp":  this.acstate.temperature - 16,
+                    "acWindSpeed": Winds[this.acstate.wind],
+                    "acWindDir": "0",
+                  },
+              "changeWindDir": "0",
+              "paraData": "0",
+            })
+          }).then(response => response.json())
+              .then(res => {
+                fetch("/task", {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(
+                      {
+                        "mac": this.$props.mac,
+                        "commandArgs": res["entity"],
+                      }
+                  ),
+                }).then(response => console.log(response))
+
+              })
 				},
 				deep: true,
 			},
